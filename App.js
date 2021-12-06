@@ -5,13 +5,10 @@ import { StyleSheet, Text, View, FlatList, Alert, TouchableWithoutFeedback, Keyb
 import Header from './components/header';
 import TodoItem from './components/todoItem';
 import AddTodo from './components/addTodo';
+import NoTodo from './components/noTodo';
 
 export default function App() {
-    const [todos, setTodos] = useState([
-        { text: 'buy coffee', key: '1' },
-        { text: 'create an app', key: '2' },
-        { text: 'play on the switch', key: '3' }
-    ]);
+    const [todos, setTodos] = useState([]);
 
     const pressHandler = (key) => {
         setTodos((prevTodos) => {
@@ -29,7 +26,7 @@ export default function App() {
                 ]
             })
         } else {
-            Alert.alert('OOPS!', 'Todos must be over 3 characters long', [
+            Alert.alert('OOPS!', 'Todos must be over 3 characters long.', [
                 { text: 'Understood', onPress: () => console.log('alert closed') }
             ]);
         }
@@ -41,14 +38,16 @@ export default function App() {
                 <Header />
                 <View style={styles.content}>
                     <AddTodo submitHandler={submitHandler} />
-                    <View style={styles.list}>
-                        <FlatList
-                            data={todos}
-                            renderItem={({ item }) => (
-                                <TodoItem item={item} pressHandler={pressHandler} />
-                            )}
-                        />
-                    </View>
+                    {todos.length != 0 ? (
+                        <View style={styles.list}>
+                            <FlatList
+                                data={todos}
+                                renderItem={({ item }) => (
+                                    <TodoItem item={item} pressHandler={pressHandler} />
+                                )}
+                            />
+                        </View>
+                    ) : <NoTodo />}
                 </View>
                 <StatusBar style="auto" />
             </View>
